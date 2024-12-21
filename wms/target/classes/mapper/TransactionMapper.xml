@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mapper.TransactionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wms.entity.Transaction">
+        <id column="id" property="id" />
+        <result column="createTime" property="createTime" />
+        <result column="handleTime" property="handleTime" />
+        <result column="type" property="type" />
+        <result column="repair" property="repair" />
+        <result column="state" property="state" />
+        <result column="remark" property="remark" />
+        <result column="postil" property="postil" />
+        <result column="studentId" property="studentId" />
+        <result column="seatId" property="seatId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, createTime, handleTime, type, repair, state, remark, postil, studentId, seatId
+    </sql>
+
+</mapper>

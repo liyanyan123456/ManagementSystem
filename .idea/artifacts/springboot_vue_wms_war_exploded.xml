@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="springboot_vue_wms:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/springboot_vue_wms_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="springboot_vue_wms/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="springboot_vue_wms" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

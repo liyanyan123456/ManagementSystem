@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mapper.SupervisorMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wms.entity.Supervisor">
+        <id column="primaryId" property="primaryId" />
+        <result column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="gender" property="gender" />
+        <result column="title" property="title" />
+        <result column="office" property="office" />
+        <result column="studentNum" property="studentNum" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        primaryId, id, name, gender, title, office, studentNum
+    </sql>
+    <select id="pageC" resultType="com.wms.entity.Supervisor">
+        select * from supervisor
+    </select>
+
+    <select id="pageCC" resultType="com.wms.entity.Supervisor">
+        select * from supervisor ${ew.customSqlSegment}
+    </select>
+
+</mapper>
