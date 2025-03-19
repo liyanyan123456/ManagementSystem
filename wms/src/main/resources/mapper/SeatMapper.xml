@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mapper.SeatMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wms.entity.Seat">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="labId" property="labId" />
+        <result column="history" property="history" />
+        <result column="state" property="state" />
+        <result column="studentId" property="studentId" />
+        <result column="supervisorId" property="supervisorId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, labId, history, state, studentId, supervisorId
+    </sql>
+    <select id="pageC" resultType="com.wms.entity.Seat">
+        select * from seat
+    </select>
+
+    <select id="pageCC" resultType="com.wms.entity.Seat">
+        select * from seat ${ew.customSqlSegment}
+    </select>
+
+</mapper>
