@@ -12,10 +12,13 @@ import com.wms.entity.User;
 import com.wms.service.MenuService;
 import com.wms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * <p>
@@ -64,12 +67,28 @@ public class UserController {
     public Result login(@RequestBody User user){
         List list = userService.lambdaQuery()
                 .eq(User::getNo,user.getNo())
-//                .eq(User::getName,user.getName())
-                .eq(User::getPassword,user.getPassword()).list();
-
+                .list();
 
         if(list.size()>0){
             User user1 = (User)list.get(0);
+            String sqlPassword=user1.getPassword();
+            String inputPassword=user.getPassword();
+            if(inputPassword==null){
+                return Result.fail();
+            }
+
+            if (sqlPassword==null || sqlPassword.length()!=64){
+                return Result.fail();
+            }
+
+            //获取盐值
+            String salt=sqlPassword.substring(0,32);
+            String calFinalPassword = DigestUtils.md5DigestAsHex((inputPassword+salt).getBytes());
+            if( !(salt+calFinalPassword).equals(sqlPassword)){
+                return Result.fail();
+            };
+            user1.setPassword(inputPassword);
+
             List menuList = menuService.lambdaQuery().like(Menu::getMenuright,user1.getRoleId()).list();
             HashMap res = new HashMap();
             res.put("user",user1);
@@ -86,13 +105,24 @@ public class UserController {
         if (user.getNo() == null || user.getPassword() == null || user.getName() == null) {
             return Result.fail();
         }
+        // 检查学号是否已经存在
+        boolean existingUser = userService.lambdaQuery()
+                .eq(User::getNo, user.getNo())
+                .count() > 0;
+
+        if (existingUser) {
+            return Result.fail().setMsg("学号/工号已存在，不能重复！");
+        }
         // 设置默认值（根据业务需要）
         if (user.getRoleId() == null) {
-            user.setRoleId(2); // 默认角色（例如：普通用户）
+            user.setRoleId(0); // 默认角色（例如：普通用户）
         }
         if (user.getIsvalid() == null) {
             user.setIsvalid("Y"); // 默认角色（例如：普通用户）
         }
+        String salt= UUID.randomUUID().toString().replace("-","");
+        String finalPassword= DigestUtils.md5DigestAsHex((user.getPassword()+salt).getBytes());
+        user.setPassword(salt+finalPassword);
 
         // 保存用户信息到数据库
         boolean success = userService.save(user);
